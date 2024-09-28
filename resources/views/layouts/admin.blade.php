@@ -8,8 +8,8 @@
     <title>
        Quiz Management System
     </title>
-    <link rel="icon" href="favicon.ico">
-    <link href="style.css" rel="stylesheet">
+    <link rel="icon" href="{{url("favicon.ico")}}">
+    <link href="{{url("style.css")}}" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -38,7 +38,7 @@
         <!-- ===== Main Content End ===== -->
     </div>
     <!-- ===== Page Wrapper End ===== -->
-    <script defer src="bundle.js"></script>
+    <script defer src="{{url('bundle.js')}}"></script>
 </body>
 
 </html>
