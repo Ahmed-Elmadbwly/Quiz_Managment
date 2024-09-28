@@ -3,12 +3,10 @@
 namespace App\Services;
 
 
-use App\Models\lessonTest;
 use App\Models\Option;
 use App\Models\Question;
 use App\Models\Quiz;
-use App\Models\TestOption;
-use App\Models\TestQuestion;
+
 
 
 class QuizzesService
@@ -63,5 +61,6 @@ class QuizzesService
         }
         return $content;
     }
+
 
 }
