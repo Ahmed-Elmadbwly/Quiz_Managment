@@ -52,15 +52,16 @@ class QuizzesController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('admin.quizzes.edit',['content'=>$this->quizzesService->showQuiz($id)]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(QuizRequest $request, string $id)
     {
-        //
+        $this->quizzesService->updateQuiz($id,$request);
+        return to_route('quizzes.index');
     }
 
     /**
@@ -68,6 +69,7 @@ class QuizzesController extends Controller
      */
     public function delete(string $id)
     {
-        //
+        $this->quizzesService->deleteQuiz($id);
+        return to_route('quizzes.index');
     }
 }

@@ -62,5 +62,40 @@ class QuizzesService
         return $content;
     }
 
+    public function updateQuiz($id,$data)
+    {
+        $quiz = Quiz::find($id);
+        $quiz->update([
+            'title' => $data->title,
+            'description' => $data->description,
+            'time' => $data->time,
+        ]);
+        foreach ($data->questionText as $questionData) {
+            $question = Question::where('quizId', $quiz->id)->where('id', $questionData['questionId'])->first();
+            if ($question) {
+                $question->update(['questionText' => $questionData['text']]);
+                $i=1;
+                foreach ($questionData['optionText'] as $index => $optionText) {
+                    $option = Option::where('questionId', $question->id)->where('id', $index)->first();
+                    if ($option) {
+                        $option->update([
+                            'optionText' => $optionText,
+                            'isCorrect' => ($questionData['isCorrect'] == $i ? 1 : 0),
+                        ]);
+                    }
+                    $i++;
+                }
+            }
+        }
+    }
+    public function deleteQuiz($id)
+    {
+        $quiz = Quiz::find($id);
+        foreach ($quiz->questions as $question) {
+            $question->options()->delete();
+            $question->delete();
+        }
+        $quiz->delete();
+       }
 
 }
