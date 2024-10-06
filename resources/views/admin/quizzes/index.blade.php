@@ -1,5 +1,5 @@
-<x-AdminLayout>
-    <div class="relative mt-6 overflow-x-auto ml-5  mr-5 shadow-md sm:rounded-lg">
+<x-admin-layout>
+    <div class="relative p-4 mt-6 overflow-x-auto ml-5  mr-5 shadow-md sm:rounded-lg">
         <h2 class="text-title-md3 mb-3  font-bold text-black dark:text-white">
             Quizzes
         </h2>
@@ -83,4 +83,4 @@
             }
         }
     </script>
-</x-AdminLayout>
+</x-admin-layout>
