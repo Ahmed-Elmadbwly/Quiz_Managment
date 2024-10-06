@@ -1,5 +1,5 @@
 <x-admin-layout>
-    <div class="relative mt-6 overflow-x-auto ml-5  mr-5 shadow-md sm:rounded-lg">
+    <div class="relative p-4 mt-6 overflow-x-auto ml-5  mr-5 shadow-md sm:rounded-lg">
     <h2 class="text-title-md3 mb-3 mt-4 font-bold text-black dark:text-white">
         {{ __('Add Quiz') }}
     </h2>
@@ -38,6 +38,14 @@
             questionInput.name = `questionText[${questionIndex}][text]`;
             questionInput.placeholder = 'Enter question';
             questionInput.className = 'bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500';
+
+            // Score input
+            const scoreInput = document.createElement('input');
+            scoreInput.type = 'number';
+            scoreInput.name = `questionText[${questionIndex}][score]`;
+            scoreInput.placeholder = 'Enter score for this question';
+            scoreInput.min = 0; // Ensure score is a non-negative number
+            scoreInput.className = 'bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500';
 
             const optionsContainer = document.createElement('div');
             optionsContainer.className = 'options-container mb-4';
@@ -91,6 +99,7 @@
             });
 
             questionBlock.appendChild(questionInput);
+            questionBlock.appendChild(scoreInput);
             questionBlock.appendChild(optionsContainer);
             questionBlock.appendChild(addOptionBtn);
             questionBlock.appendChild(removeQuestionBtn);

@@ -18,6 +18,7 @@ class QuizzesService
 
     public function createQuiz($data)
     {
+
         $quiz = Quiz::create([
             'title'=>$data->title,
             'description'=>$data->description,
@@ -29,6 +30,7 @@ class QuizzesService
             $question = Question::create([
                 'question_text' => $questionData['text'],
                 'quizId' => $quiz->id,
+                'score'=>$questionData['score'],
             ]);
 
             foreach ($questionData['optionText'] as $index => $optionText) {
@@ -55,6 +57,7 @@ class QuizzesService
             $questionArray = [
                 'id' => $question->id,
                 'questionText' => $question->question_text,
+                'score'=>$question->score,
                 'options' => $options->toArray()
             ];
             $content['questions'][] = $questionArray;
@@ -73,7 +76,7 @@ class QuizzesService
         foreach ($data->questionText as $questionData) {
             $question = Question::where('quizId', $quiz->id)->where('id', $questionData['questionId'])->first();
             if ($question) {
-                $question->update(['questionText' => $questionData['text']]);
+                $question->update(['questionText' => $questionData['text'],'score' => $questionData['score']]);
                 $i=1;
                 foreach ($questionData['optionText'] as $index => $optionText) {
                     $option = Option::where('questionId', $question->id)->where('id', $index)->first();
