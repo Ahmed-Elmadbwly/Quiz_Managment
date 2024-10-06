@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-       Quiz Management System
+        Quiz Management System
     </title>
     <link rel="icon" href="{{url("favicon.ico")}}">
     <link href="{{url("style.css")}}" rel="stylesheet">
@@ -26,6 +26,11 @@
         @include('layouts.sidebar')
         <!-- ===== Sidebar End ===== -->
         <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+            @if(auth()->user()->role == 'admin')
+            @include('layouts.sidebar')
+            @else
+            @include('layouts.student')
+            @endif
             <!-- ===== Content Area Start ===== -->
             @include('layouts.navigation')
             <!-- ===== Content Area End ===== -->
