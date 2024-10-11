@@ -6,6 +6,8 @@ namespace App\Services;
 use App\Models\Option;
 use App\Models\Question;
 use App\Models\Quiz;
+use App\Models\QuizAttempt;
+use Auth;
 
 
 
@@ -20,32 +22,33 @@ class QuizzesService
     {
 
         $quiz = Quiz::create([
-            'title'=>$data->title,
-            'description'=>$data->description,
-            'createdBy'=>auth()->id(),
-            'time'=>$data->time
+            'title' => $data->title,
+            'description' => $data->description,
+            'createdBy' => auth()->id(),
+            'time' => $data->time
         ]);
 
         foreach ($data->questionText as $questionData) {
             $question = Question::create([
                 'question_text' => $questionData['text'],
                 'quizId' => $quiz->id,
-                'score'=>$questionData['score'],
+                'score' => $questionData['score'],
             ]);
 
             foreach ($questionData['optionText'] as $index => $optionText) {
                 Option::create([
                     'optionText' => $optionText,
-                    'isCorrect' => ($questionData['isCorrect'] == $index  ? 1 : 0),
+                    'isCorrect' => ($questionData['isCorrect'] == $index ? 1 : 0),
                     'questionId' => $question->id,
                 ]);
             }
         }
-
     }
+
     public function showQuiz($id)
     {
         $quiz = Quiz::find($id);
+
         $content['quizId'] = $quiz->id;
         $content['title'] = $quiz->title;
         $content['description'] = $quiz->description;
@@ -57,15 +60,58 @@ class QuizzesService
             $questionArray = [
                 'id' => $question->id,
                 'questionText' => $question->question_text,
-                'score'=>$question->score,
+                'score' => $question->score,
                 'options' => $options->toArray()
             ];
             $content['questions'][] = $questionArray;
         }
+
         return $content;
     }
 
-    public function updateQuiz($id,$data)
+    public function submitQuiz($request)
+    {
+        $validatedData = $request->validate([
+            'quiz_id' => 'required|integer',
+            'time' => 'required|integer',
+            'questionText.*.questionId' => 'required|integer',
+            'questionText.*.optionText.*' => 'required|string',
+            'questionText.*.isCorrect' => 'nullable|integer',
+        ]);
+
+        $quizId = $validatedData['quiz_id'];
+        // $timeTaken = $validatedData['time'];
+        $questions = $validatedData['questionText'];
+        $userId = Auth::id();
+        $totalScore = 0;
+
+        foreach ($questions as $question) {
+            $questionId = $question['questionId'];
+            $isCorrect = $question['isCorrect'] ?? null;
+            $options = $question['optionText'];
+            $score = Question::where('id', $questionId)->value('score');
+
+            foreach ($options as $optionId => $option) {
+                $optionTrue = Option::where('id', $isCorrect)->where('isCorrect', 1)->first();
+            }
+
+            // calc score question
+            if ($optionTrue) {
+                $totalScore += $score;
+            }
+        }
+
+        // Store score in quiz_attempts
+        $content = QuizAttempt::create([
+            'userId' => $userId,
+            'quizId' => $quizId,
+            'score' => $totalScore,
+        ]);
+
+        return $content;
+    }
+
+    public function updateQuiz($id, $data)
     {
         $quiz = Quiz::find($id);
         $quiz->update([
@@ -76,8 +122,8 @@ class QuizzesService
         foreach ($data->questionText as $questionData) {
             $question = Question::where('quizId', $quiz->id)->where('id', $questionData['questionId'])->first();
             if ($question) {
-                $question->update(['questionText' => $questionData['text'],'score' => $questionData['score']]);
-                $i=1;
+                $question->update(['questionText' => $questionData['text'], 'score' => $questionData['score']]);
+                $i = 1;
                 foreach ($questionData['optionText'] as $index => $optionText) {
                     $option = Option::where('questionId', $question->id)->where('id', $index)->first();
                     if ($option) {
@@ -99,6 +145,6 @@ class QuizzesService
             $question->delete();
         }
         $quiz->delete();
-       }
+    }
 
 }
