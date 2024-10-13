@@ -15,4 +15,8 @@ class Quiz extends Model
     {
         return $this->hasMany(Question::class, 'quizId');
     }
+    public function testHasSubmit()
+    {
+        return QuizAttempt::where('userId',auth()->id())->where('quizId',$this->id)->first();
+    }
 }

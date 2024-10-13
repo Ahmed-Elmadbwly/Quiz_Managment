@@ -13,7 +13,7 @@
                 </ul>
             </div>
         @endif
-        <form id="test-form" method="POST" action="{{ route('student.test.store') }}">
+        <form id="test-form" method="POST" action="{{ route('test.store') }}">
             @csrf
             <input type="hidden" name="quiz_id" value="{{ $content['quizId'] }}">
 
@@ -73,10 +73,10 @@
                     }
                 }, 1000);
             }
-            // window.onload = startCountdown;
-            // document.getElementById('test-form').addEventListener('submit', function() {
-            //     localStorage.removeItem('timeLeft');
-            // });
+            window.onload = startCountdown;
+            document.getElementById('test-form').addEventListener('submit', function() {
+                localStorage.removeItem('timeLeft');
+            });
         </script>
     </div>
 </x-admin-layout>

@@ -17,19 +17,15 @@ class TestController extends Controller
     }
     public function index($id)
     {
-        $quiz = Quiz::find($id);
-
-        // check if quiz in done or no
-        $quizAttempt = QuizAttempt::where('quizId', $quiz->id)->first();
-        if ($quizAttempt) {
-            return view('user.submit', ['content' => $quizAttempt]);
-        }
-        
         return view('user.index', ['id' => $id, 'content' => $this->QuizzesService->showQuiz($id)]);
     }
 
     public function store(Request $request)
     {
         return view('user.submit', ['content' => $this->QuizzesService->submitQuiz($request)]);
+    }
+    public function show($id)
+    {
+        return view('user.show',['score'=>$this->QuizzesService->getScore($id),'content'=>$this->QuizzesService->showQuiz($id)]);
     }
 }

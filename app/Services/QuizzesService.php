@@ -7,6 +7,7 @@ use App\Models\Option;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\QuizAttempt;
+use App\Models\UserAnswer;
 use Auth;
 
 
@@ -48,6 +49,7 @@ class QuizzesService
     public function showQuiz($id)
     {
         $quiz = Quiz::find($id);
+        $score = 0;
 
         $content['quizId'] = $quiz->id;
         $content['title'] = $quiz->title;
@@ -56,16 +58,17 @@ class QuizzesService
         $content['questions'] = [];
         $questions = Question::where('quizId', $quiz->id)->get();
         foreach ($questions as $question) {
+            $score+=$question->score;
             $options = Option::where('questionId', $question->id)->get();
             $questionArray = [
                 'id' => $question->id,
                 'questionText' => $question->question_text,
                 'score' => $question->score,
-                'options' => $options->toArray()
+                'options' => $options
             ];
             $content['questions'][] = $questionArray;
         }
-
+        $content['score'] = $score;
         return $content;
     }
 
@@ -99,6 +102,21 @@ class QuizzesService
             if ($optionTrue) {
                 $totalScore += $score;
             }
+        }
+        foreach ($validatedData['questionText'] as $questionData) {
+            $optionId = '0' ; $isCorrect = false;
+            foreach ($questionData['optionText'] as $index =>  $optionText) {
+                if($questionData['isCorrect'] == $index){
+                    $isCorrect = true;
+                    $optionId = $index;
+                }
+            }
+            UserAnswer::create([
+                'userId' => auth()->id(),
+                'questionId' => $questionData['questionId'],
+                'optionId' => $optionId,
+                'isCorrect' => $isCorrect
+            ]);
         }
 
         // Store score in quiz_attempts
@@ -145,6 +163,12 @@ class QuizzesService
             $question->delete();
         }
         $quiz->delete();
+    }
+
+    public function getScore($id)
+    {
+        $score = QuizAttempt::where('quizId', $id)->where('userId', auth()->id())->first();
+        return $score;
     }
 
 }

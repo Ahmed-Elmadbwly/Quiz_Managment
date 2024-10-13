@@ -11,4 +11,7 @@
             The score in the exam: {{ $content['score'] }}
         </p>
     </div>
+    <script>
+        localStorage.removeItem('timeLeft');
+    </script>
 </x-admin-layout>

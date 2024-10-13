@@ -12,7 +12,9 @@
                 </div>
                 <input type="text" id="table-search-users" onkeyup="searchTable()" class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for Quizzes">
             </div>
+            @if(auth()->user()->role == 'admin')
             <a type="button" href="{{route('quiz.create')}}" class="text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Add Quiz</a>
+            @endif
         </div>
         <table id="classesTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -46,13 +48,21 @@
                         {{$quiz->description}}
                     </td>
                     <td class="px-6 py-4">
+                        @if(auth()->user()->role == 'admin')
                             <a href="{{route('quiz.edit',$quiz->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit |</a>
                             <form action="{{route('quiz.delete',$quiz->id)}}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button class="font-medium  text-red-600 dark:text-red-500 hover:underline"  type="submit"> Delete</button>
                             </form>
-                        <a href="{{route('quiz.show',$quiz->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">  | Show </a>
+                         <a href="{{route('quiz.show',$quiz->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">  | Show </a>
+                        @else
+                            @if($quiz->testHasSubmit())
+                                <a href="{{route('test.show',$quiz->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">  | Show </a>
+                            @else
+                                <a href="{{route('test.index',$quiz->id)}}" class="font-medium text-green-600 dark:text-green-500 hover:underline"> Start </a>
+                            @endif
+                        @endif
                     </td>
                 </tr>
             @endforeach
@@ -61,6 +71,7 @@
     </div>
 
     <script>
+        localStorage.removeItem('questionsData');
         function searchTable() {
             let input = document.getElementById('table-search-users').value.toLowerCase();
 
