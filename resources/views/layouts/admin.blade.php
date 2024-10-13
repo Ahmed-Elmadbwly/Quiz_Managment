@@ -23,16 +23,17 @@
     <!-- ===== Page Wrapper Start ===== -->
     <div class="flex h-screen overflow-hidden">
         <!-- ===== Sidebar Start ===== -->
-        @include('layouts.sidebar')
+        @if(auth()->user()->role == 'admin')
+            @include('layouts.sidebar')
+        @else
+            @include('layouts.student')
+        @endif
         <!-- ===== Sidebar End ===== -->
         <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-            @if(auth()->user()->role == 'admin')
-            @include('layouts.sidebar')
-            @else
-            @include('layouts.student')
-            @endif
-            <!-- ===== Content Area Start ===== -->
             @include('layouts.navigation')
+
+            <!-- ===== Content Area Start ===== -->
+
             <!-- ===== Content Area End ===== -->
 
             <!-- ===== Main Content Start ===== -->

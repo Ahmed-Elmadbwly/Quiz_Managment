@@ -61,6 +61,7 @@
     </div>
 
     <script>
+        localStorage.removeItem('questionsData');
         function searchTable() {
             let input = document.getElementById('table-search-users').value.toLowerCase();
 
