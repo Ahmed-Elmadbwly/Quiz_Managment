@@ -10,7 +10,7 @@ class ResultsController extends Controller
 {
     public function show($id)
     {
-       $quiz = Quiz::with(['attempts.user', 'questions'])->findOrFail($id);
+       $quiz = Quiz::with(['attempts'])->findOrFail($id);
 
        return view('admin.results.show', compact('quiz'));
    }
