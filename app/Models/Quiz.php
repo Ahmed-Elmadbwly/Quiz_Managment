@@ -19,4 +19,16 @@ class Quiz extends Model
     {
         return QuizAttempt::where('userId',auth()->id())->where('quizId',$this->id)->first();
     }
+
+
+    public function attempts()
+    {
+        return $this->hasMany(QuizAttempt::class, 'quizId');
+    }
+
+    public function getMaxScoreFromQuestions()
+    {
+        return $this->questions()->sum('score');
+    }
 }
+
