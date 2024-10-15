@@ -34,7 +34,7 @@
             <!-- ===== Content Area Start ===== -->
             @include('layouts.navigation')
             <!-- ===== Content Area End ===== -->
-
+            
             <!-- ===== Main Content Start ===== -->
             <main>
                 {{ $slot }}
