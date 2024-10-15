@@ -35,7 +35,7 @@
             <!-- ===== Content Area Start ===== -->
 
             <!-- ===== Content Area End ===== -->
-
+            
             <!-- ===== Main Content Start ===== -->
             <main>
                 {{ $slot }}
