@@ -30,6 +30,9 @@
                     Description
                 </th>
                 <th scope="col" class="px-6 py-3">
+                    Results
+                </th>
+                <th scope="col" class="px-6 py-3">
                     Action
                 </th>
             </tr>
@@ -46,6 +49,14 @@
                     </td>
                     <td class="px-6 py-4">
                         {{$quiz->description}}
+                    </td>
+
+                    <td class="px-6 py-4">
+                        <div>
+                            <a href="{{ route('results.show', $quiz->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                Results
+                            </a>
+                        </div>
                     </td>
                     <td class="px-6 py-4">
                         @if(auth()->user()->role == 'admin')
