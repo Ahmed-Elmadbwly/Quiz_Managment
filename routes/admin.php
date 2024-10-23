@@ -3,11 +3,11 @@
 use App\Http\Controllers\admin\QuizzesController;
 use App\Http\Controllers\admin\ResultsController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\DashBoardController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/dashboard', function () {
-    return view('admin.dashboard');
-})->name('dashboard')->middleware('auth');
+Route::get('/dashboard', [DashBoardController::class,'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware('auth')->prefix('admin')->controller(QuizzesController::class)->group(function () {
     Route::get("/quizzes", "index")->name("quizzes.index");
