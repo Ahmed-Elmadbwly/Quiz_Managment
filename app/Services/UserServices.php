@@ -9,7 +9,7 @@ class UserServices
 {
     public function getUsers($role)
     {
-        return  user::get()->where("role",$role);
+        return  user::get()->where("role",$role)->where('id','!=',auth()->id());
     }
     public function getUserById($id)
     {

@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\QuizzesController;
-use App\Http\Controllers\Admin\ResultsController;
+use App\Http\Controllers\admin\ResultsController;
 use App\Http\Controllers\admin\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,5 +30,5 @@ Route::middleware('auth')->prefix('admin')->controller(UserController::class)->g
 });
 
 Route::middleware('auth')->prefix('admin')->controller(ResultsController::class)->group(function () {
-    Route::get("/results/{id}", "show")->name("results.show"); 
+    Route::get("/results/{id}", "show")->name("results.show");
 });
